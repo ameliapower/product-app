@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import PropTypes from 'prop-types';
 import ProductRow from './ProductRow';
 import CategoryRow from './CategoryRow';
 import response from './data.json'; //if using local data source
@@ -7,57 +8,30 @@ import response from './data.json'; //if using local data source
 export class ProductList extends Component{
 	constructor(props){
 		super(props);
-		this.state = {
-			isLoading: false,
-			products: []
-		}
+
 		this.handleRemove = this.handleRemove.bind(this)
 	}
 
-	componentWillMount(){
-		this.setState({
-			isLoading: true
-		})
-
-		// console.log(response);
-		fetch(response)
-		.then(products => response.data) //local source doesn't need json parsing
-		.then(products => this.setState({
-		  products,
-		  isLoading: false
-		}))
-		.catch(isError => this.setState({
-		    isError: 'error getting data'
-		}))
-
-	} //ComponentDidMount
-
-
 	handleRemove(productId){
-		 this.setState((prevState) => {
-			let products = prevState.products;
-			console.log(products);
-			console.log(productId);
-			// console.log(products[productId]);
-			delete products[productId];
-			return { products };
-	    });
+		// console.log(productId)
+		this.props.onRemove(productId);
 	}
 
 	render(){
 		//state
-		const products = this.state.products;
-		const loading = this.state.isLoading;
+		const products = this.props.products;
+		const loading = this.props.isLoading;
 		//props
 		const searchFilter = this.props.searchFilter;
       	const inStock = this.props.inStock;
 		
-		// console.log(this.state);
 		let rows = [];
 		let lastCategory=null;
 
-
+		// console.log(products)
+		// console.log(Array.isArray(products))
 		products.map((product, i) => {
+			// console.log(product)
 			//filter by search keyword
 			if (product.name.indexOf(searchFilter) === -1) {
 				return;
@@ -77,13 +51,15 @@ export class ProductList extends Component{
 	 		}
 	 		rows.push(
 				<ProductRow 
-					key={product.name}
+					key={product.id}
+					prodID={product.id}
 					onRemove={this.handleRemove}
+					updateItem={this.props.updateItem}
+					cat={product.category}
 					product={product}
 					productName={product.name}
 					stocked={product.stocked}
 					productPrice={product.price}
-					pId={product.id}
 				/>
 	 		)
 	 		lastCategory = product.category;
@@ -102,8 +78,20 @@ export class ProductList extends Component{
 	}
 }
 
+
+// ProductRow.propTypes = {
+// 	cat: PropTypes.string,
+// 	productName: PropTypes.string,
+// 	productPrice: PropTypes.string,
+// 	// newCategory: PropTypes.string,
+// 	stocked: PropTypes.bool
+// };
+
+
 // To Do: 
+// change stocked prop to boolean on update
+// update
 // isLoading
-// update 
 // add
 // sort
+

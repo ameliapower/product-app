@@ -25,12 +25,10 @@ $ npm install
 ```
 $ npm start
 ```
-```
 
 4. Run npm build:
 ```
 $ npm run build
-```
 ```
 
 5. Run test:

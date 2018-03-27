@@ -37,9 +37,9 @@ describe('ProductRow', () => {
 
 
 	it('renders without crashing', () => {
-	  const table = document.createElement('table');
-	  ReactDOM.render(<ProductRow />, table);
-	  ReactDOM.unmountComponentAtNode(table);
+	  const tbody = document.createElement('tbody');
+	  ReactDOM.render(<ProductRow />, tbody);
+	  ReactDOM.unmountComponentAtNode(tbody);
 	});
 
 }); //describe
